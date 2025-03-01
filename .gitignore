@@ -1,0 +1,4 @@
+**/.env
+**/acme.json
+**/cf-token
+**/traefik.yaml

@@ -44,7 +44,7 @@ services:
       - 'traefik.http.routers.traefik-secure.tls=true'
       - 'traefik.http.routers.traefik-secure.tls.certresolver=cloudflare'
       - 'traefik.http.routers.traefik-secure.tls.domains[0].main=oliverilp.ee'
-      - 'traefik.http.routers.traefik-secure.tls.domains[0].sans=*.oliverilp.ee'
+      - 'traefik.http.routers.traefik-secure.tls.domains[0].sans=*.oliverilp.ee,*.traefik.oliverilp.ee,*.local.traefik.oliverilp.ee'
       - 'traefik.http.routers.traefik-secure.service=api@internal'
 
 secrets:

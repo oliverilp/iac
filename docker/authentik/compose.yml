@@ -18,30 +18,18 @@ services:
       - /home/ubuntu/docker/volumes/authentik/custom-templates:/templates
     env_file:
       - .env
-    ports:
-      - '8080:8080'
-      - '8000:80'
-    # depends_on:
-    #   - postgresql
-    #   - redis
     networks:
       - proxy
       - postgres
       - redis
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.authentik.entrypoints=http'
       - 'traefik.http.routers.authentik.rule=Host(`auth.oliverilp.ee`)'
-      - 'traefik.http.routers.authentik-secure.tls=true'
-      # - 'traefik.http.middlewares.authentik-https-redirect.redirectscheme.scheme=https'
-      # - 'traefik.http.routers.authentik.middlewares=authentik-https-redirect'
-      # - 'traefik.http.routers.authentik-secure.entrypoints=https'
-      # - 'traefik.http.routers.authentik-secure.rule=Host(`auth.oliverilp.ee`)'
-      # - 'traefik.http.routers.authentik-secure.service=authentik'
-
-      - 'traefik.http.services.authentik.loadbalancer.server.scheme=http'
+      - 'traefik.http.routers.authentik.entrypoints=https'
+      - 'traefik.http.routers.authentik.tls=true'
+      - 'traefik.http.routers.authentik.service=authentik'
       - 'traefik.http.services.authentik.loadbalancer.server.port=9000'
-      # - 'traefik.docker.network=proxy'
+      - 'traefik.docker.network=proxy'
   worker:
     image: ghcr.io/goauthentik/server:2025.2.1
     restart: unless-stopped
@@ -66,9 +54,6 @@ services:
       - /home/ubuntu/docker/volumes/authentik/custom-templates:/templates
     env_file:
       - .env
-    # depends_on:
-    #   - postgresql
-    #   - redis
     networks:
       - proxy
       - postgres

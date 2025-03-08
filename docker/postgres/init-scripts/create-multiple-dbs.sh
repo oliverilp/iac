@@ -8,8 +8,7 @@ function create_db_and_user_if_not_exists() {
 
   echo "Ensuring database '$dbName' and user '$dbUser' exist..."
 
-  # We use an anonymous DO block to check existence, then create them only if missing.
-  # This ensures it's idempotent, so re-running won't break anything.
+  # Create user if not exists
   psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     -- Create user if not exists
     DO \$\$
@@ -22,19 +21,16 @@ function create_db_and_user_if_not_exists() {
       END IF;
     END
     \$\$;
-
-    -- Create DB if not exists, and set owner
-    DO \$\$
-    BEGIN
-      IF NOT EXISTS (
-        SELECT FROM pg_database
-        WHERE datname = '$dbName'
-      ) THEN
-        CREATE DATABASE $dbName OWNER $dbUser;
-      END IF;
-    END
-    \$\$;
 EOSQL
+
+  # Check if database exists and create it if not
+  db_exists=$(psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -tAc "SELECT 1 FROM pg_database WHERE datname='$dbName'")
+  if [ -z "$db_exists" ]; then
+    echo "Creating database $dbName..."
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -c "CREATE DATABASE $dbName OWNER $dbUser"
+  else
+    echo "Database $dbName already exists."
+  fi
 }
 
 # If POSTGRES_MULTIPLE_DBS is non-empty, parse it

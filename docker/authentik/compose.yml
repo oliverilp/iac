@@ -33,15 +33,14 @@ services:
       - 'traefik.http.routers.authentik.entrypoints=http'
       - 'traefik.http.routers.authentik.rule=Host(`auth.oliverilp.ee`)'
       - 'traefik.http.routers.authentik-secure.tls=true'
-      - 'traefik.http.services.authentik.loadbalancer.server.port=8080'
       # - 'traefik.http.middlewares.authentik-https-redirect.redirectscheme.scheme=https'
       # - 'traefik.http.routers.authentik.middlewares=authentik-https-redirect'
       # - 'traefik.http.routers.authentik-secure.entrypoints=https'
       # - 'traefik.http.routers.authentik-secure.rule=Host(`auth.oliverilp.ee`)'
       # - 'traefik.http.routers.authentik-secure.service=authentik'
 
-      # - 'traefik.http.services.authentik.loadbalancer.server.scheme=https'
-      # - 'traefik.http.services.authentik.loadbalancer.server.port=9443'
+      - 'traefik.http.services.authentik.loadbalancer.server.scheme=http'
+      - 'traefik.http.services.authentik.loadbalancer.server.port=9000'
       # - 'traefik.docker.network=proxy'
   worker:
     image: ghcr.io/goauthentik/server:2025.2.1

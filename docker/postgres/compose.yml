@@ -1,0 +1,27 @@
+name: postgres
+
+services:
+  postgresql:
+    image: docker.io/library/postgres:12-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER']
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?database password required}
+      POSTGRES_MULTIPLE_DBS: ${POSTGRES_MULTIPLE_DBS}
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - /home/ubuntu/docker/volumes/postgres:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    external: true

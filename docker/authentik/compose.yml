@@ -18,9 +18,9 @@ services:
       - /home/ubuntu/docker/volumes/authentik/custom-templates:/templates
     env_file:
       - .env
-    depends_on:
-      - postgresql
-      - redis
+    # depends_on:
+    #   - postgresql
+    #   - redis
     networks:
       - proxy
       - postgres
@@ -63,9 +63,9 @@ services:
       - /home/ubuntu/docker/volumes/authentik/custom-templates:/templates
     env_file:
       - .env
-    depends_on:
-      - postgresql
-      - redis
+    # depends_on:
+    #   - postgresql
+    #   - redis
     networks:
       - proxy
       - postgres
